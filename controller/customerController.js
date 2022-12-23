@@ -70,7 +70,7 @@ const login = async (req, res) => {
 
     let token = jwt.sign(
       {
-        customer: findCustomer._id.toString()
+        customerId: findCustomer._id.toString()
       },
       
       'radon'
@@ -107,10 +107,10 @@ const getCustomerdetail = async (req, res) => {
 const deleteDetailsOfCustomer = async (req, res) => {
   try {
     let customerId = req.params.customerId;
-
+    console.log(customerId);
     //========================================= validations for customerId=========================================
 
-    if (!Object.keys(customerId)) {
+    if (!mongoose.isValidObjectId(customerId)) {
       return res.status(400).send({ status: false, message: "Please provide valid customer Id" });
     }
 
@@ -118,7 +118,7 @@ const deleteDetailsOfCustomer = async (req, res) => {
 
     let checkCustomer = await customerModel.findOne({_id: customerId,isDeleted: false});
 
-    if (!checkCustomer) {
+    if (!checkCustomer){
       return res.status(404).send({ status: false, message: "customer doesn't exist" });
     }
 
@@ -128,7 +128,8 @@ const deleteDetailsOfCustomer = async (req, res) => {
 
     return res.status(200).send({ status: true, message: "Product Deleted Succesfully" });
   } catch (error) {
-    res.status(500).send({ status: false, message: error.message });
+   
+    return res.status(500).send({ status: false, message: error.message });
   }
 }
 
