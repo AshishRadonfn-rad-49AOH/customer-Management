@@ -1,11 +1,12 @@
 const mongoose = require('mongoose')
+const autoIncrement = require('mongoose-sequence')(mongoose)
 const ObjectId = mongoose.Schema.Types.ObjectId
 
 const cardSchema = new mongoose.Schema({
+  _id:Number,
   cardNumber: {
-    type:String,
+    type: String,
     required: true,
-    autoIncrement: true,
     trim: true
   },
   
@@ -34,5 +35,6 @@ const cardSchema = new mongoose.Schema({
     required:true
   }
 }, {timestamps:true})
+cardSchema.plugin(autoIncrement)
 
 module.exports = mongoose.model('card',cardSchema)
